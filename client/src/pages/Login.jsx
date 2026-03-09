@@ -63,7 +63,7 @@ const Login = () => {
         localStorage.setItem('user', JSON.stringify(data.user));
         navigate('/dashboard');
       }
-    } catch (error) {
+    } catch {
       setServerError('Something went wrong. Please try again.');
     } finally {
       setIsSubmitting(false);
