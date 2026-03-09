@@ -3,24 +3,26 @@ import { useNavigate } from 'react-router-dom';
 
 const Dashboard = () => {
   const navigate = useNavigate();
-  const [user, setUser] = useState(null);
+  const [user] = useState(() => {
+    const userString = localStorage.getItem('user');
+    if (userString) {
+      try {
+        return JSON.parse(userString);
+      } catch {
+        localStorage.removeItem('token');
+        localStorage.removeItem('user');
+        return null;
+      }
+    }
+    return null;
+  });
 
   useEffect(() => {
     const token = localStorage.getItem('token');
-    const userString = localStorage.getItem('user');
 
-    if (!token || !userString) {
+    if (!token) {
       navigate('/login');
       return;
-    }
-
-    try {
-      const parsedUser = JSON.parse(userString);
-      setUser (parsedUser);
-    } catch (error ) {
-      localStorage.removeItem('token');
-      localStorage.removeItem('user');
-      navigate('/login');
     }
   }, [navigate]);
 
