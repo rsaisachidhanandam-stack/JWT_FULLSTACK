@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import api from '../services/api';
 
 const Dashboard = () => {
   const navigate = useNavigate();
-  const [user] = useState(() => {
+  const [user, setUser] = useState(() => {
     const userString = localStorage.getItem('user');
     if (userString) {
       try {
@@ -24,6 +25,23 @@ const Dashboard = () => {
       navigate('/login');
       return;
     }
+
+    // NEW: get fresh user data from backend using api
+    const fetchUser = async () => {
+      try {
+        const res = await api.get('/auth/me'); // adjust to your actual route
+        // assuming backend returns { user: {...} }
+        if (res.data.user) {
+          setUser(res.data.user);
+          localStorage.setItem('user', JSON.stringify(res.data.user));
+        }
+      } catch (err) {
+        console.error('Fetch user error:', err);
+        // if 401 happens, api.js interceptor will already log out & redirect
+      }
+    };
+
+    fetchUser();
   }, [navigate]);
 
   const handleLogout = () => {
