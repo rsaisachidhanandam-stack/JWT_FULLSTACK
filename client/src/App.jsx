@@ -1,16 +1,12 @@
-import React from 'react';
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
-import Login from './pages/Login';
-import Dashboard from './pages/Dashboard';
+// App.jsx (only the important part)
+import CreatePost from "./pages/createPost";
 
-const App = () => (
-  <BrowserRouter>
-    <Routes>
-      <Route path="/login" element={<Login />} />
-      <Route path="/dashboard" element={<Dashboard />} />
-      <Route path="*" element={<Navigate to="/login" />} />
-    </Routes>
-  </BrowserRouter>
-);
-
-export default App;
+// inside <Routes>
+<Route
+  path="/create-post"
+  element={
+    <ProtectedRoute>
+      <CreatePost />
+    </ProtectedRoute>
+  }
+/>
